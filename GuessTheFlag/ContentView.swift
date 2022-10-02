@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
-    let countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Monaco", "Nigeria", "Poland", "Russia", "Spain", "UK", "USA"]
-    private var randomCountry = Int.random(in: 0...2)
+    @State var result = ""
+    @State var resultIsPresented = false
+    @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Monaco", "Nigeria", "Poland", "Russia", "Spain", "UK", "USA"].shuffled()
+    @State private var randomCountry = Int.random(in: 0...2)
     
     var body: some View {
         ZStack {
@@ -25,7 +27,8 @@ struct ContentView: View {
             
                 ForEach(0..<3) { i in
                     Button {
-                        
+                        resultIsPresented = true
+                        flagTapped(i)
                     } label: {
                         Image(countries[i].lowercased())
                             .renderingMode(.original)
@@ -34,6 +37,32 @@ struct ContentView: View {
             }
             .padding()
         }
+        .alert(result, isPresented: $resultIsPresented) {
+            Button("Continue") {
+                askQuestion()
+            }
+        } message: {
+            Text("Your score is ???")
+        }
+    }
+    
+    func randomiseCountry() {
+        randomCountry = Int.random(in: 0...2)
+    }
+    
+    func flagTapped(_ number: Int) {
+        resultIsPresented = true
+        
+        if number == randomCountry {
+            result = "Correct"
+        } else {
+            result = "Incorrect"
+        }
+    }
+    
+    func askQuestion() {
+        countries.shuffle()
+        randomiseCountry()
     }
 }
 
