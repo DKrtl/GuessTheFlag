@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @State var result = ""
     @State var resultIsPresented = false
-    @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Monaco", "Nigeria", "Poland", "Russia", "Spain", "UK", "USA"].shuffled()
+    @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Monaco", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     @State private var randomCountry = Int.random(in: 0...2)
     
     var body: some View {
