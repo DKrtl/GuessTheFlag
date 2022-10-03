@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var result = ""
+    @State var result = false
     @State var resultIsPresented = false
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Monaco", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     @State private var randomCountry = Int.random(in: 0...2)
+    @State private var selectedFlag = 0
     @State private var score = 0
     
     var body: some View {
@@ -42,7 +43,8 @@ struct ContentView: View {
                     ForEach(0..<3) { i in
                         Button {
                             resultIsPresented = true
-                            flagTapped(i)
+                            selectedFlag = i
+                            flagTapped()
                         } label: {
                             Image(countries[i].lowercased())
                                 .renderingMode(.original)
@@ -79,9 +81,13 @@ struct ContentView: View {
             }
             .padding()
         }
-        .alert(result, isPresented: $resultIsPresented) {
+        .alert(popupMessage(), isPresented: $resultIsPresented) {
             Button("Continue") {
                 askQuestion()
+            }
+        } message: {
+            if !result {
+                Text("The flag you selected is \(countries[selectedFlag])")
             }
         }
     }
@@ -90,20 +96,26 @@ struct ContentView: View {
         randomCountry = Int.random(in: 0...2)
     }
     
-    func flagTapped(_ number: Int) {
-        resultIsPresented = true
-        
-        if number == randomCountry {
-            result = "Correct"
+    func flagTapped() {
+        if selectedFlag == randomCountry {
+            result = true
             score += 1
         } else {
-            result = "Incorrect"
+            result = false
         }
     }
     
     func askQuestion() {
         countries.shuffle()
         randomiseCountry()
+    }
+    
+    func popupMessage() -> String {
+        if result {
+            return "Correct"
+        } else {
+            return "Incorrect"
+        }
     }
 }
 
