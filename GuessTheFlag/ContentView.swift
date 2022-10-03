@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @State var result = false
     @State var resultIsPresented = false
-    @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Monaco", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
+    @State private var countries = allCountries.shuffled()
     @State private var randomCountry = Int.random(in: 0...2)
     @State private var selectedFlag = 0
     @State private var numberOfFlagsGuessed = 0
@@ -18,6 +18,8 @@ struct ContentView: View {
     @State private var gameOver = false
     
     let maxGuesses = 8
+    
+    static let allCountries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Monaco", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"]
     
     var body: some View {
         ZStack {
@@ -112,14 +114,17 @@ struct ContentView: View {
     
     func flagTapped() {
         if selectedFlag == randomCountry {
-            result = true
             score += 1
+            result = true
         } else {
             result = false
         }
     }
     
     func askQuestion() {
+        if result {
+            countries.remove(at: randomCountry)
+        }
         countries.shuffle()
         randomiseCountry()
     }
@@ -139,6 +144,7 @@ struct ContentView: View {
     func newGame() {
         numberOfFlagsGuessed = 0
         score = 0
+        countries = Self.allCountries
         askQuestion()
     }
 }
