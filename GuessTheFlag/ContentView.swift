@@ -21,7 +21,9 @@ struct ContentView: View {
             VStack(spacing: 30) {
                 VStack {
                     Text("Which flag belongs to")
+                        .font(.subheadline.weight(.heavy))
                     Text("\(countries[randomCountry])")
+                        .font(.largeTitle.weight(.semibold))
                 }
                 .foregroundColor(.white)
             
@@ -32,6 +34,8 @@ struct ContentView: View {
                     } label: {
                         Image(countries[i].lowercased())
                             .renderingMode(.original)
+                            .clipShape(Capsule())
+                            .shadow(radius: 5)
                     }
                 }
             }
