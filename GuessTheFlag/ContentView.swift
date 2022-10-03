@@ -12,6 +12,7 @@ struct ContentView: View {
     @State var resultIsPresented = false
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Monaco", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     @State private var randomCountry = Int.random(in: 0...2)
+    @State private var score = 0
     
     var body: some View {
         ZStack {
@@ -58,9 +59,21 @@ struct ContentView: View {
                 Spacer()
                 Spacer()
                 
-                Text("Score")
-                    .foregroundColor(.white)
-                    .font(.title.bold())
+                VStack {
+                    Spacer()
+                    
+                    Text("Score")
+                        .foregroundColor(.white)
+                        .font(.title.bold())
+                    
+                    Spacer()
+                    
+                    Text("\(score)")
+                        .foregroundColor(.white)
+                        .font(.title)
+                    
+                    Spacer()
+                }
                 
                 Spacer()
             }
@@ -70,8 +83,6 @@ struct ContentView: View {
             Button("Continue") {
                 askQuestion()
             }
-        } message: {
-            Text("Your score is ???")
         }
     }
     
@@ -84,6 +95,7 @@ struct ContentView: View {
         
         if number == randomCountry {
             result = "Correct"
+            score += 1
         } else {
             result = "Incorrect"
         }
