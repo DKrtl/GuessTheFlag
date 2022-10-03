@@ -13,7 +13,11 @@ struct ContentView: View {
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Monaco", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     @State private var randomCountry = Int.random(in: 0...2)
     @State private var selectedFlag = 0
+    @State private var numberOfFlagsGuessed = 0
     @State private var score = 0
+    @State private var gameOver = false
+    
+    let maxGuesses = 8
     
     var body: some View {
         ZStack {
@@ -42,9 +46,14 @@ struct ContentView: View {
                     
                     ForEach(0..<3) { i in
                         Button {
-                            resultIsPresented = true
                             selectedFlag = i
+                            numberOfFlagsGuessed += 1
                             flagTapped()
+                            if numberOfFlagsGuessed == maxGuesses {
+                                gameOver = true
+                            } else {
+                                resultIsPresented = true
+                            }
                         } label: {
                             Image(countries[i].lowercased())
                                 .renderingMode(.original)
@@ -70,7 +79,7 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    Text("\(score)")
+                    Text("\(score)\\\\\(numberOfFlagsGuessed)")
                         .foregroundColor(.white)
                         .font(.title)
                     
@@ -81,14 +90,21 @@ struct ContentView: View {
             }
             .padding()
         }
-        .alert(popupMessage(), isPresented: $resultIsPresented) {
+        .alert(popupMainMessage(), isPresented: $resultIsPresented) {
             Button("Continue") {
                 askQuestion()
             }
         } message: {
             if !result {
-                Text("The flag you selected is \(countries[selectedFlag])")
+                Text(popUpSecondaryMessage())
             }
+        }
+        .alert("Game Over", isPresented: $gameOver) {
+            Button("Restart") {
+                
+            }
+        } message: {
+            Text("Your score is \(score)\\\\\(maxGuesses)")
         }
     }
     
@@ -110,12 +126,16 @@ struct ContentView: View {
         randomiseCountry()
     }
     
-    func popupMessage() -> String {
+    func popupMainMessage() -> String {
         if result {
             return "Correct"
         } else {
             return "Incorrect"
         }
+    }
+    
+    func popUpSecondaryMessage() -> String {
+        return "The flag you selected is \(countries[selectedFlag])"
     }
 }
 
