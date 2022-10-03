@@ -100,9 +100,7 @@ struct ContentView: View {
             }
         }
         .alert("Game Over", isPresented: $gameOver) {
-            Button("Restart") {
-                
-            }
+            Button("Restart", action: newGame)
         } message: {
             Text("Your score is \(score)\\\\\(maxGuesses)")
         }
@@ -136,6 +134,12 @@ struct ContentView: View {
     
     func popUpSecondaryMessage() -> String {
         return "The flag you selected is \(countries[selectedFlag])"
+    }
+    
+    func newGame() {
+        numberOfFlagsGuessed = 0
+        score = 0
+        askQuestion()
     }
 }
 
